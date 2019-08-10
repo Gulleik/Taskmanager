@@ -22,8 +22,8 @@ const userSchema = new mongoose.Schema( {
     email: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
+        unique: true,
         validate(value) {
             if(!validator.isEmail(value)){
                 throw new Error("Email is invalid")
@@ -73,6 +73,16 @@ userSchema.methods.generateAuthToken = async function () {
     await user.save()
 
     return token
+}
+
+userSchema.methods.toJSON = function (){
+    const user = this
+    const userObject = user.toObject()
+
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
 }
 
 userSchema.pre("save", async function (next) {
