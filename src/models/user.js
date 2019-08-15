@@ -48,6 +48,8 @@ const userSchema = new mongoose.Schema( {
             required: true
         }
     }]
+},{
+    timestamps: true
 })
 
 userSchema.statics.findByCredentials = async (email , password) => {
@@ -77,7 +79,7 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 userSchema.virtual("tasks", {
-    ref: "tasks",
+    ref: "Task",
     localField: "_id",
     foreignField: "owner"
 })
